@@ -1,14 +1,22 @@
 import React, { Component } from "react";
 // import Particles from 'react-particles-js';
 import ParticlesBg from "particles-bg";
-import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
+
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import Logo from "./components/Logo/Logo";
-import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import Rank from "./components/Rank/Rank";
 import "./App.css";
+import BirdGame from "./BirdGame/BirdGame";
+
+const GAME_WIDTH = Math.max(document.documentElement.clientHeight) * 0.4;
+const BIRD_SIZE = 0.04 * GAME_WIDTH;
+const GAME_HEIGHT = GAME_WIDTH;
+const GRAVITY = 0.008 * GAME_WIDTH;
+const JUMP_HEIGHT = 0.16 * GAME_WIDTH;
+const OBSTACLE_WIDTH = 0.08 * GAME_WIDTH;
+const OBSTACLE_GAP = 0.3125 * GAME_WIDTH;
 
 const initialState = {
   input: "",
@@ -43,56 +51,8 @@ class App extends Component {
     });
   };
 
-  calculateFaceLocation = (data) => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById("inputimage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height,
-    };
-  };
-
-  displayFaceBox = (box) => {
-    this.setState({ box: box });
-  };
-
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
-  };
-
-  onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
-    fetch("http://localhost:3000/imageurl", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        input: this.state.input,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response) {
-          fetch("http://localhost:3000/image", {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: this.state.user.id,
-            }),
-          })
-            .then((response) => response.json())
-            .then((count) => {
-              this.setState(Object.assign(this.state.user, { entries: count }));
-            })
-            .catch(console.log);
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response));
-      })
-      .catch((err) => console.log(err));
   };
 
   onRouteChange = (route) => {
@@ -120,11 +80,15 @@ class App extends Component {
               name={this.state.user.name}
               entries={this.state.user.entries}
             />
-            <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
+            <BirdGame
+              GAME_WIDTH={GAME_WIDTH}
+              GAME_HEIGHT={GAME_HEIGHT}
+              BIRD_SIZE={BIRD_SIZE}
+              GRAVITY={GRAVITY}
+              JUMP_HEIGHT={JUMP_HEIGHT}
+              OBSTACLE_GAP={OBSTACLE_GAP}
+              OBSTACLE_WIDTH={OBSTACLE_WIDTH}
             />
-            <FaceRecognition box={box} imageUrl={imageUrl} />
           </div>
         ) : route === "signin" ? (
           <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
