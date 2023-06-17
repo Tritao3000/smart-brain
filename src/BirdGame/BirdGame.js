@@ -22,6 +22,7 @@ const BirdGame = ({
   useEffect(() => {
     if (gameHasStarted) {
       document.getElementById("high-score").style.display = "none";
+      document.getElementById("game-over").style.display = "none";
       document.getElementById("score").style.display = "block";
     } else {
       if (score > highScore) {
@@ -78,6 +79,7 @@ const BirdGame = ({
     ) {
       setBirdPosition(GAME_WIDTH / 2);
       setGameHasStarted(false);
+      document.getElementById("game-over").style.display = "block";
     }
   }, [gameHasStarted, obstacleLeft]);
 
@@ -118,6 +120,7 @@ const BirdGame = ({
       </GameBox>
       <span id="score">{score}</span>
       <span id="high-score"> High Score: {highScore}</span>
+      <h6 id="game-over"> Game Over! </h6>
     </Div>
   );
 };
@@ -143,6 +146,12 @@ const Div = styled.div`
     color: white;
     font-size: 20px;
     position: absolute;
+  }
+  & h6 {
+    color: white;
+    font-size: 24px;
+    position: absolute;
+    display: none;
   }
 `;
 

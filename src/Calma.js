@@ -47,6 +47,12 @@ onButtonSubmit = () => {
     .catch((err) => console.log(err));
 };
 
+onInputChange = (event) => {
+    this.setState({ input: event.target.value });
+  };
+
+  mudanças no inicial state tambem no app.js
+
 // SERVER.JS
 
 app.put("/image", (req, res) => {

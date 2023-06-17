@@ -19,16 +19,12 @@ const OBSTACLE_WIDTH = 0.08 * GAME_WIDTH;
 const OBSTACLE_GAP = 0.3125 * GAME_WIDTH;
 
 const initialState = {
-  input: "",
-  imageUrl: "",
-  box: {},
-  route: "signin",
-  isSignedIn: false,
+  route: "home",
+  isSignedIn: true,
   user: {
     id: "",
     name: "",
     email: "",
-    entries: 0,
     joined: "",
   },
 };
@@ -45,14 +41,9 @@ class App extends Component {
         id: data.id,
         name: data.name,
         email: data.email,
-        entries: data.entries,
         joined: data.joined,
       },
     });
-  };
-
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value });
   };
 
   onRouteChange = (route) => {
@@ -65,7 +56,7 @@ class App extends Component {
   };
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, route } = this.state;
     return (
       <div className="App">
         <ParticlesBg type="lines" bg={true} />
@@ -76,10 +67,7 @@ class App extends Component {
         {route === "home" ? (
           <div>
             <Logo />
-            <Rank
-              name={this.state.user.name}
-              entries={this.state.user.entries}
-            />
+            <Rank name={this.state.user.name} />
             <BirdGame
               GAME_WIDTH={GAME_WIDTH}
               GAME_HEIGHT={GAME_HEIGHT}
