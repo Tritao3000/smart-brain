@@ -19,8 +19,8 @@ const OBSTACLE_WIDTH = 0.08 * GAME_WIDTH;
 const OBSTACLE_GAP = 0.3125 * GAME_WIDTH;
 
 const initialState = {
-  route: "home",
-  isSignedIn: true,
+  route: "signin",
+  isSignedIn: false,
   user: {
     id: "",
     name: "",
